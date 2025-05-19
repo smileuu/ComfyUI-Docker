@@ -1,0 +1,26 @@
+services:
+
+  comfyui:
+    init: true
+    container_name: comfyui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "yanwk/comfyui-boot:cu128"
+    ports:
+      - "8188:8188"
+    volumes:
+      - "/opt/comfyui-storage:/root"
+    environment:
+      - CLI_ARGS=
+      - HTTP_PROXY=http://172.17.0.1:7890
+      - HTTPS_PROXY=http://172.17.0.1:7890
+    security_opt:
+      - "label=type:nvidia_container_t"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
